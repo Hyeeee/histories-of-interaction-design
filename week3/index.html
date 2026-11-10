@@ -316,12 +316,12 @@
           <rect id="moonwash" x="92" y="70" width="166" height="148" fill="#3b4596" opacity="0.5" class="screen"/>
 
           <!-- 빛 레이어 -->
-          <circle id="wall-glow" class="screen" cx="520" cy="250" r="330" fill="url(#wallGlow)" opacity="0"/>
+          <circle id="wall-glow" class="screen" cx="520" cy="256" r="330" fill="url(#wallGlow)" opacity="0"/>
           <ellipse id="pool" class="screen" cx="520" cy="360" rx="170" ry="16" fill="url(#pool)" opacity="0"/>
 
           <!-- 스탠드: 받침은 고정, 팔과 갓은 경첩(520,350)을 중심으로 회전 -->
           <ellipse id="lamp-base" cx="520" cy="354" rx="30" ry="6" fill="#2b2d3a"/>
-          <g id="lamp" transform="rotate(-82 520 350)">
+          <g id="lamp">
             <polygon id="beam" class="screen" points="494,266 546,266 650,352 390,352" fill="url(#beamGrad)" opacity="0"/>
             <g id="dust" class="screen"></g>
             <rect id="arm" x="516" y="262" width="8" height="90" rx="3" fill="#2b2d3a"/>
@@ -414,9 +414,6 @@ const MISSING_FRAMES = 20;// 페이지 마커가 이만큼 안 보여야 "카드
 const RATIO_FLAT = 0.35;  // 마커가 이 정도로 납작하게 보이면 거의 누운 것 → 가장 어둡게
 const RATIO_UP = 0.85;    // 이 정도면 똑바로 선 것 → 가장 밝게
 
-// 화면 속 스탠드 각도 (0 = 똑바로 섬, -82 = 책상에 누움)
-const ANGLE_FOLDED = -82;
-const ANGLE_LOWEST_ON = -58;
 
 // =========================================================================
 // 2. 화면 요소
@@ -457,7 +454,6 @@ let candidate = 'missing';
 let candidateCount = 0;
 let target = 0;             // 원하는 밝기 (0 = 꺼짐, 1 = 최대)
 let light = 0;              // 지금 실제 밝기. target을 향해 부드럽게 따라감
-let angle = ANGLE_FOLDED;   // 화면 속 스탠드 각도. 목표 각도를 부드럽게 따라감
 let keyOverride = null;     // 키보드 테스트: { state, level }
 let lastStep = -1;          // 디머 '딸깍' 소리용 (밝기를 10칸으로 나눈 위치)
 
@@ -737,11 +733,9 @@ function setSeen(chip, seen) {
 }
 
 function render(time) {
-  // 실제 밝기와 각도가 목표를 조금씩 따라감 → 불이 스르르, 스탠드가 부드럽게
+  // 실제 밝기가 목표를 조금씩 따라감 → 불이 스르르 켜지고 꺼짐
+  // 화면 속 스탠드는 항상 서 있고, 빛만 바뀜
   light += (target - light) * 0.08;
-  let targetAngle = ANGLE_FOLDED;
-  if (state === 'on') targetAngle = ANGLE_LOWEST_ON * (1 - (target - 0.25) / 0.75);
-  angle += (targetAngle - angle) * 0.1;
 
   // 방 조명
   const dark = state === 'missing' ? 0.9 : 0.84;
@@ -750,16 +744,9 @@ function render(time) {
   moonwash.setAttribute('opacity', (0.28 * (1 - light)).toFixed(3));
   spill.style.opacity = (light * 0.85).toFixed(3);
 
-  // 스탠드 회전 + 전구 위치 계산 (경첩에서 84px 위가 전구)
-  lamp.setAttribute('transform', `rotate(${angle.toFixed(2)} 520 350)`);
-  const rad = angle * Math.PI / 180;
-  const bx = 520 + 84 * Math.sin(rad);
-  const by = 350 - 84 * Math.cos(rad);
-  wallGlow.setAttribute('cx', bx.toFixed(1));
-  wallGlow.setAttribute('cy', (by - 10).toFixed(1));
+  // 벽에 번지는 빛과 책상 위 빛 웅덩이
   wallGlow.setAttribute('opacity', light.toFixed(3));
-  pool.setAttribute('cx', (520 + 140 * Math.sin(rad)).toFixed(1));
-  pool.setAttribute('opacity', (light * Math.cos(rad)).toFixed(3));
+  pool.setAttribute('opacity', light.toFixed(3));
 
   beam.setAttribute('opacity', (light * 0.9).toFixed(3));
   bulbGlow.setAttribute('opacity', light.toFixed(3));
@@ -806,8 +793,9 @@ function render(time) {
   pctEl.innerHTML = pct + '<small>%</small>';
   const lit = Math.round(light * 20);
   segs.forEach((s, i) => s.classList.toggle('lit', i < lit));
-  const standDeg = Math.round(90 + angle); // 90 = 똑바로 섬
-  angleEl.innerHTML = 'lamp angle<br>' + (state === 'on' ? standDeg + '°' : 'folded');
+  // 종이 스탠드가 대략 몇 도 서 있는지 (밝기에서 거꾸로 추정, 90 = 똑바로)
+  const standDeg = Math.round(30 + (target - 0.25) / 0.75 * 60);
+  angleEl.innerHTML = 'paper lamp<br>' + (state === 'on' ? 'raised ' + standDeg + '°' : state === 'off' ? 'folded' : 'no card');
 
   // 디머 소리: 켜진 상태에서 밝기 단계가 바뀔 때마다
   if (state === 'on') {
