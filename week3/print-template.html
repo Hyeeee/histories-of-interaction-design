@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pop-up Lamp Print Template</title>
+  <script src="marker-maker.js"></script>
+  <style>
+    /* 실제 크기(mm)로 인쇄. 인쇄할 때 배율 100% (Actual size) */
+    @page { size: 8.5in 11in; margin: 6mm; }
+    html, body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: -apple-system, Helvetica, Arial, sans-serif; color: #222; }
+    .screen-note { padding: 12px 16px; background: #fff4dc; font-size: 14px; line-height: 1.5; }
+    @media print { .screen-note { display: none; } }
+    .page { width: 203mm; height: 266mm; margin: 0 auto; overflow: hidden; display: flex; flex-direction: column; align-items: center; break-after: page; page-break-after: always; }
+    .page:last-of-type { break-after: auto; page-break-after: auto; }
+    .col { display: flex; flex-direction: column; gap: 6mm; }
+    .legend { font-size: 3.2mm; margin: 2mm 0 3mm; color: #444; align-self: flex-start; }
+    .legend b.cut { color: #000; } .legend b.fold { color: #888; } .legend b.slit { color: #d33; } .legend b.glue { color: #2a7; }
+    .row { display: flex; gap: 8mm; align-items: flex-start; justify-content: center; }
+    .label { font-size: 3mm; color: #555; margin-top: 1.5mm; }
+    svg text { font-family: -apple-system, Helvetica, Arial, sans-serif; }
+  </style>
+</head>
+<body>
+  <div class="screen-note">
+    US Letter. Print on cardstock at <b>100% / Actual size</b> (turn off "Fit to page" and headers and footers). 2 pages in total. Page 1 is the card (back page and floor). Page 2 is the lamp, the pull strip and a stand.
+  </div>
+
+  <!-- 1쪽: 카드 (뒤 페이지 + 바닥 페이지) -->
+  <div class="page">
+    <p class="legend"><b class="cut">Solid black</b> cut · <b class="fold">grey dashes</b> fold · <b class="slit">red</b> cut a slit · <b class="glue">green</b> glue here</p>
+    <svg width="190mm" height="250mm" viewBox="0 0 190 250">
+      <!-- 바깥선 -->
+      <rect x="0.3" y="0.3" width="189.4" height="249.4" fill="none" stroke="#000" stroke-width="0.6"/>
+      <!-- 가운데 접는 선 (뒤 페이지 | 바닥 페이지) -->
+      <line x1="0" y1="125" x2="190" y2="125" stroke="#888" stroke-width="0.6" stroke-dasharray="3 2"/>
+      <text x="4" y="122" font-size="3.2" fill="#888">fold to 90° (back page stands up)</text>
+
+      <!-- 뒤 페이지 -->
+      <text x="4" y="7" font-size="3.6" fill="#777">BACK PAGE · stands up, faces the camera</text>
+      <!-- 벽지 느낌 아주 연한 선 (마커와 멀리) -->
+      <g stroke="#eee" stroke-width="0.5">
+        <line x1="20" y1="30" x2="20" y2="118"/><line x1="40" y1="30" x2="40" y2="118"/>
+        <line x1="150" y1="75" x2="150" y2="118"/><line x1="170" y1="75" x2="170" y2="118"/>
+      </g>
+      <!-- 당김 띠가 지나갈 틈: 접는 선에서 위로 99mm -->
+      <line x1="86" y1="26" x2="104" y2="26" stroke="#d33" stroke-width="0.8"/>
+      <text x="80" y="22" font-size="3" fill="#d33">slit · pull strip goes through</text>
+      <!-- 페이지 마커 1 자리 -->
+      <g id="m1" transform="translate(132,6)"></g>
+      <text x="138" y="70" font-size="3" fill="#777">marker 1 · keep visible</text>
+
+      <!-- 바닥 페이지 -->
+      <text x="4" y="246" font-size="3.6" fill="#777">FLOOR · lies on the desk</text>
+      <!-- 조명 풀칠 자리: 접는 선 바로 앞. 탭 끝 접는 선이 y=140에 오게 -->
+      <rect x="65" y="128" width="60" height="12" fill="#2a7" fill-opacity="0.15" stroke="#2a7" stroke-width="0.5"/>
+      <text x="67" y="136" font-size="3" fill="#2a7">glue lamp tab here (marker face down)</text>
+      <!-- 누운 조명이 차지할 자리 안내 -->
+      <rect x="57" y="140" width="76" height="94" fill="none" stroke="#ccc" stroke-width="0.4" stroke-dasharray="1.5 1.5"/>
+      <text x="72" y="200" font-size="3" fill="#bbb">lamp lies here when off</text>
+      <!-- 러그 그림 -->
+      <ellipse cx="160" cy="200" rx="22" ry="12" fill="none" stroke="#e6d3c0" stroke-width="0.8"/>
+    </svg>
+  </div>
+
+  <!-- 2쪽: 조명, 당김 띠, 받침대 -->
+  <div class="page">
+    <p class="legend"><b class="cut">Solid black</b> cut · <b class="fold">grey dashes</b> fold · <b class="glue">green</b> glue here</p>
+    <div class="row">
+      <div class="col">
+      <div>
+        <!-- 조명 조각: 갓(마커 2) + 기둥 + 받침 + 풀칠 탭 -->
+        <svg width="76mm" height="106mm" viewBox="0 0 76 106">
+          <path d="M9,0 L67,0 L76,64 L44,64 L44,86 L68,86 L68,106 L8,106 L8,86 L32,86 L32,64 L0,64 Z"
+                fill="#fff" stroke="#000" stroke-width="0.6"/>
+          <g id="m2" transform="translate(12.3,4)"></g>
+          <line x1="8" y1="94" x2="68" y2="94" stroke="#888" stroke-width="0.5" stroke-dasharray="2 1.5"/>
+          <rect x="8" y="94" width="60" height="12" fill="#2a7" fill-opacity="0.15"/>
+          <text x="12" y="102" font-size="3" fill="#2a7">glue tab</text>
+          <text x="35" y="78" font-size="2.6" fill="#999" transform="rotate(-90 35 78)">stem</text>
+        </svg>
+        <div class="label">LAMP FRONT · with marker 2</div>
+      </div>
+
+      <div>
+        <!-- 조명 조각: 갓(마커 2) + 기둥 + 받침 + 풀칠 탭 -->
+        <svg width="76mm" height="106mm" viewBox="0 0 76 106">
+          <path d="M9,0 L67,0 L76,64 L44,64 L44,86 L68,86 L68,106 L8,106 L8,86 L32,86 L32,64 L0,64 Z"
+                fill="#fff" stroke="#000" stroke-width="0.6"/>
+          <text x="38" y="34" font-size="3.4" fill="#bbb" text-anchor="middle">back copy · no marker</text>
+          <line x1="8" y1="94" x2="68" y2="94" stroke="#888" stroke-width="0.5" stroke-dasharray="2 1.5"/>
+          <rect x="8" y="94" width="60" height="12" fill="#2a7" fill-opacity="0.15"/>
+          <text x="12" y="102" font-size="3" fill="#2a7">glue tab</text>
+          <text x="35" y="78" font-size="2.6" fill="#999" transform="rotate(-90 35 78)">stem</text>
+        </svg>
+        <div class="label">LAMP BACK · glue behind the front copy</div>
+      </div>
+
+      </div>
+
+      <div>
+        <!-- 당김 띠 -->
+        <svg width="16mm" height="170mm" viewBox="0 0 16 170">
+          <rect x="0.3" y="0.3" width="15.4" height="169.4" fill="#fff" stroke="#000" stroke-width="0.6"/>
+          <rect x="0.3" y="0.3" width="15.4" height="12" fill="#2a7" fill-opacity="0.15"/>
+          <text x="2" y="8" font-size="2.6" fill="#2a7">glue</text>
+          <text x="10" y="150" font-size="5" font-weight="700" transform="rotate(-90 10 150)">PULL</text>
+        </svg>
+        <div class="label">PULL STRIP</div>
+      </div>
+
+      <div>
+        <!-- 받침대: 접어서 삼각 기둥 → 뒤 페이지 뒤에 붙여 90도 유지 -->
+        <svg width="40mm" height="185mm" viewBox="0 0 40 185">
+          <rect x="0.3" y="0.3" width="39.4" height="184.4" fill="#fff" stroke="#000" stroke-width="0.6"/>
+          <line x1="0" y1="50" x2="40" y2="50" stroke="#888" stroke-width="0.5" stroke-dasharray="2 1.5"/>
+          <line x1="0" y1="100" x2="40" y2="100" stroke="#888" stroke-width="0.5" stroke-dasharray="2 1.5"/>
+          <line x1="0" y1="171" x2="40" y2="171" stroke="#888" stroke-width="0.5" stroke-dasharray="2 1.5"/>
+          <rect x="0.3" y="171" width="39.4" height="13.7" fill="#2a7" fill-opacity="0.15"/>
+          <text x="4" y="28" font-size="3" fill="#777">glue to back page</text>
+          <text x="4" y="78" font-size="3" fill="#777">glue to floor</text>
+          <text x="4" y="138" font-size="3" fill="#777">slope</text>
+          <text x="4" y="179" font-size="2.6" fill="#2a7">glue flap</text>
+        </svg>
+        <div class="label">STAND (optional)<br>fold into a triangle</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // MarkerMaker.svg(번호, 한 변 mm)는 <svg> 하나를 만들어 줌.
+    // 도안 안쪽 <g> 자리에 넣을 때는 그 svg를 그대로 중첩해서 넣는다.
+    function place(groupId, id, sizeMm) {
+      const holder = document.getElementById(groupId);
+      const s = MarkerMaker.svg(id, sizeMm)
+        .replace(/width="[\d.]+mm" height="[\d.]+mm"/, 'width="' + (sizeMm * 9 / 7) + '" height="' + (sizeMm * 9 / 7) + '"');
+      holder.innerHTML = s;
+    }
+    place('m1', 1, 40);  // 뒤 페이지 마커: 40mm
+    place('m2', 2, 40);  // 조명 갓 마커: 40mm
+  </script>
+</body>
+</html>
